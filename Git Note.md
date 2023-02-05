@@ -652,7 +652,7 @@ stash@{0}: WIP on main: bab2d99 Update Git Note.md
 
 ######################
 #恢复的方法有两种：
-#1、使用git stash pop，恢复的同时也把stash内容也删了
+#方法1、使用git stash pop，恢复的同时也把stash内容也删了
 $ git stash pop
 On branch dev
 Changes to be committed:
@@ -667,6 +667,9 @@ Changes not staged for commit:
 	modified:   readme.txt
 
 Dropped refs/stash@{0} (5d677e2ee266f39ea296182fb2354265b91b3b2a)
+##########################################
+# 方法2，你可以多次stash，恢复的时候，先用git stash list查看，然后恢复指定的stash
+$ git stash apply stash@{0}
 ```
 
 
