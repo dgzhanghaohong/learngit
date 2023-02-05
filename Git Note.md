@@ -480,9 +480,37 @@ w(work)--->|my branch|my(my branch,我就在这个分支上玩耍)--->|merge to 
 
 * 首先创建`dev`分支
 
+```shell
+git checkout -b dev
+Switched to a new branch 'dev'
+```
+
+* `git checkout`命令加上`-b`参数表示创建并切换，相当于以下两条命令：
+
+```
+$ git branch dev
+$ git checkout dev
+Switched to branch 'dev'
+```
+
+* 用`git branch`查看当前分支 ——`git branch`命令会列出所有分支，当前分支前面会标一个`*`号。
+* 你可以通过`git checkout barnch_name`来切换分支
+
+```shell
+$ git branch
+* dev
+  main
+```
+
+* 然后，我们就可以在`dev`分支上正常提交
 
 
 
+### 6.1.3 删除分支
+
+
+
+### 6.1.3 合并分支
 
 
 
