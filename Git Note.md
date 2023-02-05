@@ -524,6 +524,14 @@ $ git checkout main
 
 ### 6.1.3 合并分支
 
+```shell
+$ git merge dev
+Updating d46f35e..b17d20e
+Fast-forward
+ readme.txt | 1 +
+ 1 file changed, 1 insertion(+)
+```
+
 
 
 
