@@ -504,7 +504,19 @@ $ git branch
 
 * 然后，我们就可以在`dev`分支上正常提交
 
+```shell
+$ git add readme.txt 
+$ git commit -m "branch test"
+[dev b17d20e] branch test
+ 1 file changed, 1 insertion(+)
+```
 
+* 切回main/master分支，查看新建的文件是不存在的
+
+```shell
+$ git checkout main
+
+```
 
 ### 6.1.3 删除分支
 
