@@ -515,10 +515,14 @@ $ git commit -m "branch test"
 
 ```shell
 $ git checkout main
-
 ```
 
-### 6.1.3 删除分支
+* 切换分支这个动作，用`switch`更科学。因此，最新版本的Git提供了新的`git switch`命令来切换分支
+
+```shell
+$ git switch -c dev # 创建分支
+$ git switch master # 直接切换到已有的master分支
+```
 
 
 
@@ -532,11 +536,22 @@ Fast-forward
  1 file changed, 1 insertion(+)
 ```
 
+* `git merge`命令用于合并指定分支到当前分支。如果你要将`dev`分支合并到`main`分支，那么你首先需要通过`git checkout main`切换会`main`分支，然后在`main`分支内运行`git merge dev`，如此便将`dev`分支合并到当前分支`main`当中了。
+
+  > `Fast-forward`是指本次采用的合并方式是快进方式，也就是将`master`指针直接移动到分支`dev`指针当中，这样便可快速完成两个分支的合并。Git并不是每次都能够采用`Fast-forward`方式进行合并，**还存在其它形式的合并方式**。
 
 
 
+### 6.1.4 删除分支
 
+合并完成后，就可以放心地删除`dev`分支了：
 
+```shell
+$ git branch -d dev
+Deleted branch dev (was b17d20e).
+```
+
+> 因为创建、合并和删除分支非常快，所以Git鼓励你使用分支完成某个任务，合并后再删掉分支，这和直接在`master`分支上工作效果是一样的，但过程更安全。
 
 
 
