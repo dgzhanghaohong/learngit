@@ -538,7 +538,25 @@ Fast-forward
 
 * `git merge`命令用于合并指定分支到当前分支。如果你要将`dev`分支合并到`main`分支，那么你首先需要通过`git checkout main`切换会`main`分支，然后在`main`分支内运行`git merge dev`，如此便将`dev`分支合并到当前分支`main`当中了。
 
-  > `Fast-forward`是指本次采用的合并方式是快进方式，也就是将`master`指针直接移动到分支`dev`指针当中，这样便可快速完成两个分支的合并。Git并不是每次都能够采用`Fast-forward`方式进行合并，**还存在其它形式的合并方式**。
+  > `Fast-forward`是指本次采用的合并方式是快
+  >
+  > 进方式，也就是将`master`指针直接移动到分支`dev`指针当中，这样便可快速完成两个分支的合并。Git并不是每次都能够采用`Fast-forward`方式进行合并，**还存在其它形式的合并方式**。
+
+* 如果要强制禁用`Fast forward`模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。`git merge --on-ff`，命令可以生成这样的操作，其中`--on-ff`表示关闭`Fast-forward`模式 ，采用普通模式合并。
+
+```shell
+$ git merge --no-ff -m "merge with no-ff" dev
+Merge made by the 'recursive' strategy.
+ readme.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ 
+ $ git log --graph --pretty=oneline --abbrev-commit
+*   e1e9c68 (HEAD -> master) merge with no-ff
+|\  
+| * f52c633 (dev) add merge
+|/  
+*   cf810e4 conflict fixed
+```
 
 
 
@@ -558,6 +576,110 @@ Deleted branch dev (was b17d20e).
 ## 6.2 解决冲突
 
 * 这里的冲突管理，就是**不能适用Fast-forward合并方式**的情况如何解决冲突问题。
+
+```ascii
+                          HEAD
+                              │
+                              │
+                              ▼
+                           master
+                              │
+                              │
+                              ▼
+                            ┌───┐
+                         ┌─▶│   │
+┌───┐    ┌───┐    ┌───┐  │  └───┘
+│   │───▶│   │───▶│   │──┤
+└───┘    └───┘    └───┘  │  ┌───┐
+                         └─▶│   │
+                            └───┘
+                              ▲
+                              │
+                              │
+                          feature1
+```
+
+* Git用`<<<<<<<`，`=======`，`>>>>>>>`标记出不同分支的内容
+
+* 用带参数的`git log`也可以看到分支的合并情况：
+
+  ```shell
+  $ git log --graph --pretty=oneline --abbrev-commit
+  *   cf810e4 (HEAD -> master) conflict fixed
+  |\  
+  | * 14096d0 (feature1) AND simple
+  * | 5dc6824 & simple
+  |/  
+  * b17d20e branch test
+  * d46f35e (origin/master) remove test.txt
+  * b84166e add test.txt
+  * 519219b git tracks changes
+  * e43a48b understand how stage works
+  * 1094adb append GPL
+  * e475afc add distributed
+  * eaadf4e wrote a readme file
+  ```
+
+
+
+## 6.3 分支管理策略
+
+### 6.3.1 分支管理基本原则
+
+在实际开发中，分支管理策略遵循以下几个基本原则：
+
+首先，`master`分支应该是非常稳定的，只用来发布最新版本，平时不能在上面干活。
+
+其次，我们干活都在`dev`分支上，也就是说`dev`分支是非常不稳定的，到某个时候，比如1.0要发布时，再把`dev`分支合并到master上，在`master`上发布`1.0`版本。
+
+最后，你和你的小伙伴们每个人都在`dev`分支上干活，每个人都有自己的分支，时不时地往`dev`分支上合并就可以了。
+
+### 6.3.2 Bug分支
+
+* 有了bug就需要修复，在Git中，由于分支是如此的强大，所以，每个bug都可以通过一个新的临时分支来修复，修复后，合并分支，然后将临时分支删除。
+* `stash`功能：可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作（也就是暂时将目前还没有提交到分支的工作存储起来）。
+
+```shell
+$ git stash
+Saved working directory and index state WIP on dev: f52c633 add merge
+# 现在，用git status查看工作区，就是干净的（除非有没有被Git管理的文件），因此可以放心地创建分支来修复bug。
+
+#当你修复完Bug或者完成其它工作后，想重启目前的工作的时候，应该：
+$git switch dev #切回到dev分支上
+$git status # 发现工作区时干净的，这个时候需要找回之前被挂起的工作
+$git stash list 
+stash@{0}: WIP on main: bab2d99 Update Git Note.md
+
+######################
+#恢复的方法有两种：
+#1、使用git stash pop，恢复的同时也把stash内容也删了
+$ git stash pop
+On branch dev
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   hello.py
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   readme.txt
+
+Dropped refs/stash@{0} (5d677e2ee266f39ea296182fb2354265b91b3b2a)
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
