@@ -706,6 +706,74 @@ Deleted branch feature-vulcan (was 287773e).
 
 ### 6.3.4 多人合作
 
+```shell
+$ git push origin master #推送到远程的master分支
+$ git push origin dev #推动到远程的dev分支
+```
+
+多人协作的工作模式通常是这样：
+
+1. 首先，可以试图用`git push origin <branch-name>`推送自己的修改；
+2. 如果推送失败，则因为远程分支比你的本地更新，需要先用`git pull`试图合并；
+3. 如果合并有冲突，则解决冲突，并在本地提交；
+4. 没有冲突或者解决掉冲突后，再用`git push origin <branch-name>`推送就能成功！
+
+如果`git pull`提示`no tracking information`，则说明本地分支和远程分支的链接关系没有创建，用命令`git branch --set-upstream-to <branch-name> origin/<branch-name>`。
+
+**SUMMARY：**
+
+- 查看远程库信息，使用`git remote -v`；
+- 本地新建的分支如果不推送到远程，对其他人就是不可见的；
+- 从本地推送分支，使用`git push origin branch-name`，如果推送失败，先用`git pull`抓取远程的新提交；
+- 在本地创建和远程分支对应的分支，使用`git checkout -b branch-name origin/branch-name`，本地和远程分支的名称最好一致；
+- 建立本地分支和远程分支的关联，使用`git branch --set-upstream branch-name origin/branch-name`；
+- 从远程抓取分支，使用`git pull`，如果有冲突，要先处理冲突。
+
+
+
+# 7 标签管理
+
+> 发布一个版本时，我们通常先在版本库中打一个标签（tag），这样，就唯一确定了打标签时刻的版本。将来无论什么时候，取某个标签的版本，就是把那个打标签的时刻的历史版本取出来。所以，标签也是版本库的一个快照。
+
+* Git的标签虽然是版本库的快照，但其实它就是指向某个commit的指针
+* tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起(commit实在是太乱)
+
+## 7.1 创建标签
+
+```shell
+git tag tag_name # 讲当前的提交的commit tag为tag_name
+```
+
+默认标签是打在最新提交的commit上的。有时候，如果忘了打标签，比如，现在已经是周五了，但应该在周一打的标签没有打，怎么办？
+
+方法是找到历史提交的commit id，然后打上就可以了：
+
+```shell
+$ git log --pretty=oneline --abbrev-commit
+12a631b (HEAD -> master, tag: v1.0, origin/master) merged bug fix 101
+4c805e2 fix bug 101
+e1e9c68 merge with no-ff
+f52c633 add merge
+cf810e4 conflict fixed
+5dc6824 & simple
+14096d0 AND simple
+b17d20e branch test
+d46f35e remove test.txt
+b84166e add test.txt
+519219b git tracks changes
+e43a48b understand how stage works
+1094adb append GPL
+e475afc add distributed
+eaadf4e wrote a readme file
+```
+
+比方说要对`add merge`这次提交打标签，它对应的commit id是`f52c633`，敲入命令：
+
+```shell
+$ git tag v0.9 f52c633
+```
+
+## 7.2 操作标签
 
 
 
@@ -713,6 +781,11 @@ Deleted branch feature-vulcan (was 287773e).
 
 
 
+# 8 创建Git服务器
+
+
+
+# 9 GitHub使用技巧
 
 
 
