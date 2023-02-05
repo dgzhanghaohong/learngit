@@ -652,7 +652,7 @@ stash@{0}: WIP on main: bab2d99 Update Git Note.md
 
 ######################
 #恢复的方法有两种：
-#方法1、使用git stash pop，恢复的同时也把stash内容也删了
+#1、使用git stash pop，恢复的同时也把stash内容也删了
 $ git stash pop
 On branch dev
 Changes to be committed:
@@ -667,14 +667,42 @@ Changes not staged for commit:
 	modified:   readme.txt
 
 Dropped refs/stash@{0} (5d677e2ee266f39ea296182fb2354265b91b3b2a)
-##########################################
-# 方法2，你可以多次stash，恢复的时候，先用git stash list查看，然后恢复指定的stash
-$ git stash apply stash@{0}
 ```
 
 
 
+在master分支上修复了bug后，我们要想一想，dev分支是早期从master分支分出来的，所以，这个bug其实在当前dev分支上也存在。
 
+那怎么在dev分支上修复同样的bug？重复操作一次，提交不就行了？
+
+有木有更简单的方法？有！
+
+同样的bug，要在dev上修复，我们只需要把`4c805e2 fix bug 101`这个提交所做的修改“复制”到dev分支。注意：我们只想复制`4c805e2 fix bug 101`这个提交所做的修改，并不是把整个master分支merge过来。
+
+为了方便操作，Git专门提供了一个`cherry-pick`命令，让我们能复制一个特定的提交到当前分支：
+
+```
+$ git branch
+* dev
+  master
+$ git cherry-pick 4c805e2
+[master 1d4b803] fix bug 101
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
+
+Git自动给dev分支做了一次提交，注意这次提交的commit是`1d4b803`，它并不同于master的`4c805e2`，因为这两个commit只是改动相同，但确实是两个不同的commit。用`git cherry-pick`，我们就不需要在dev分支上手动再把修bug的过程重复一遍。
+
+有些聪明的童鞋会想了，既然可以在master分支上修复bug后，在dev分支上可以“重放”这个修复过程，那么直接在dev分支上修复bug，然后在master分支上“重放”行不行？当然可以，不过你仍然需要`git stash`命令保存现场，才能从dev分支切换到master分支。
+
+### 6.3.3 Features分支
+
+* **开发一个新feature，最好新建一个分支**
+* 丢弃一个没有被合并过的分支，可以通过`git branch -D <name>`强行删除
+
+```shell
+$ git branch -D feature-vulcan
+Deleted branch feature-vulcan (was 287773e).
+```
 
 
 
