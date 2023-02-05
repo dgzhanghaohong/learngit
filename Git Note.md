@@ -555,7 +555,9 @@ Deleted branch dev (was b17d20e).
 
 
 
+## 6.2 解决冲突
 
+* 这里的冲突管理，就是**不能适用Fast-forward合并方式**的情况如何解决冲突问题。
 
 
 
