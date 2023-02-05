@@ -704,6 +704,8 @@ $ git branch -D feature-vulcan
 Deleted branch feature-vulcan (was 287773e).
 ```
 
+### 6.3.4 多人合作
+
 
 
 
